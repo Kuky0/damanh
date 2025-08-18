@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const container = document.querySelector(".container");
   const card = document.querySelector(".card");
 
-  // Helper function to animate 'top' smoothly
   function animateTop(element, target, duration) {
     let start = null;
     const initial = parseInt(getComputedStyle(element).top) || 0;
