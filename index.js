@@ -2,8 +2,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const container = document.querySelector(".container");
   const card = document.querySelector(".card");
 
-  let isHovered = false;
-
   // Helper function to animate 'top' smoothly
   function animateTop(element, target, duration) {
     let start = null;
@@ -25,19 +23,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   container.addEventListener("mouseenter", function () {
     animateTop(card, -90, 600); // 600ms similar to "slow"
-    isHovered = true;
   });
 
   container.addEventListener("mouseleave", function () {
     animateTop(card, 0, 600);
-    isHovered = false;
-    card.classList.remove("flipped");
-  });
-
-  card.addEventListener("click", function (e) {
-    if (isHovered) {
-      card.classList.toggle("flipped");
-    }
   });
 });
-
