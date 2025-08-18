@@ -2,7 +2,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const container = document.querySelector(".container");
   const cardGroup = document.querySelector(".card-group");
   const card = document.querySelector(".card");
+  const envelope = document.querySelector(".envelope");
   let flipped = false;
+  let isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
 
   // smooth hover animation (card rises gently)
   function animateTop(element, target, duration) {
@@ -23,14 +25,31 @@ document.addEventListener("DOMContentLoaded", function () {
     requestAnimationFrame(step);
   }
 
-  // Hover up/down effect
-  container.addEventListener("mouseenter", function () {
-    if (!flipped) animateTop(cardGroup, -90, 600);
-  });
+  // Hover up/down effect for desktop
+  if (!isTouchDevice) {
+    container.addEventListener("mouseenter", function () {
+      if (!flipped) animateTop(cardGroup, -90, 600);
+    });
 
-  container.addEventListener("mouseleave", function () {
-    if (!flipped) animateTop(cardGroup, 0, 600);
-  });
+    container.addEventListener("mouseleave", function () {
+      if (!flipped) animateTop(cardGroup, 0, 600);
+    });
+  } else {
+    // On touch devices, tap the envelope to animate up if not flipped
+    envelope.addEventListener("touchstart", function (e) {
+      if (!flipped) {
+        animateTop(cardGroup, -90, 600);
+        // Optional: prevent double tap zoom
+        e.preventDefault();
+      }
+    });
+    // Optionally, tap outside the card to bring it back down if not flipped
+    document.body.addEventListener("touchstart", function (e) {
+      if (!flipped && !envelope.contains(e.target) && cardGroup.style.top !== "0px") {
+        animateTop(cardGroup, 0, 600);
+      }
+    });
+  }
 
   // Click flip effect
   card.addEventListener("click", () => {
