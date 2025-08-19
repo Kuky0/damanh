@@ -2,9 +2,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const container = document.querySelector(".container");
   const cardGroup = document.querySelector(".card-group");
   const card = document.querySelector(".card");
-  let flipped = false;
-  let isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+  const envelope = document.querySelector(".envelope");
 
+  let flipped = false;
+  let opened = false;
+
+  // smooth hover/touch animation (card rises gently)
   function animateTop(element, target, duration) {
     let start = null;
     const initial = parseInt(getComputedStyle(element).top) || 0;
@@ -15,41 +18,46 @@ document.addEventListener("DOMContentLoaded", function () {
       const progress = timestamp - start;
       const percent = Math.min(progress / duration, 1);
       element.style.top = initial + distance * percent + "px";
-      if (percent < 1) requestAnimationFrame(step);
+      if (percent < 1) {
+        requestAnimationFrame(step);
+      }
     }
 
     requestAnimationFrame(step);
   }
 
-  // Hover effect only for desktop
-  if (!isTouchDevice) {
+  // Detect if device really supports hover
+  const supportsHover = window.matchMedia("(hover: hover)").matches;
+
+  if (supportsHover) {
+    // Desktop hover
     container.addEventListener("mouseenter", function () {
-      if (!flipped) animateTop(cardGroup, -90, 600);
+      if (!flipped && !opened) animateTop(cardGroup, -90, 600);
     });
+
     container.addEventListener("mouseleave", function () {
-      if (!flipped) animateTop(cardGroup, 0, 600);
+      if (!flipped && !opened) animateTop(cardGroup, 0, 600);
+    });
+  } else {
+    // Touch devices — tap envelope to open
+    envelope.addEventListener("click", () => {
+      if (!opened) {
+        cardGroup.style.transition = "top 0.6s ease";
+        cardGroup.style.top = "-200px"; // slide up
+        opened = true;
+      }
     });
   }
 
-  // On both desktop + touch: tap/click the card to open
-  card.addEventListener(isTouchDevice ? "touchstart" : "click", (e) => {
-    e.preventDefault(); // prevents double-tap zoom on iPhone
+  // Card click always flips (but only after opening on touch)
+  card.addEventListener("click", () => {
+    if (!supportsHover && !opened) return; // block flip until opened on touch
+
     if (!flipped) {
-      // Move card group out of envelope
-      cardGroup.style.transition = "top 0.6s ease, transform 1s ease";
-      cardGroup.style.top = "-200px";
-
-      // After rising, flip card
-      setTimeout(() => {
-        card.classList.add("flipped");
-      }, 600);
-
+      card.classList.add("flipped");
       flipped = true;
     } else {
-      // Flip back
       card.classList.remove("flipped");
-      cardGroup.style.transition = "top 0.6s ease, transform 1s ease";
-      cardGroup.style.top = "0px";
       flipped = false;
     }
   });
