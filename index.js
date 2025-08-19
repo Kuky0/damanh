@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
         cardGroup.classList.add("zoomed-group");
 
         // Apply zoom factor dynamically
-        let zoom = /iPhone|iPad|iPod/i.test(navigator.userAgent) ? 1.6 : 2.5; 
+        let zoom = /iPhone|iPad|iPod/i.test(navigator.userAgent) ? 1.5 : 2.5; 
         cardGroup.style.transform = `translate(-50%, -50%) scale(${zoom})`;
       }, 1000);
     } else {
