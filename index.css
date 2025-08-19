@@ -10,6 +10,16 @@ body {
   position: relative;
 }
 
+.zoomed-group {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) scale(2.5); /* zoom factor */
+  transition: transform 1s ease;
+  z-index: 999;
+}
+
+
 .anniversary {
   position: relative;
   top: 50px;

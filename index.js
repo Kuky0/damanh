@@ -53,12 +53,20 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!flipped) {
       card.classList.add("flipped");
       flipped = true;
+
+      // After flip finishes (1s transition), zoom the whole group
+      setTimeout(() => {
+        cardGroup.classList.add("zoomed-group");
+      }, 1000);
     } else {
+      // Flip back
       card.classList.remove("flipped");
+      cardGroup.classList.remove("zoomed-group"); // remove zoom when flipping back
       flipped = false;
     }
 
-    // Prevent card click from bubbling up and reopening
     event.stopPropagation();
   });
+
+
 });
