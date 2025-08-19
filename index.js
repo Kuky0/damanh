@@ -2,12 +2,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const container = document.querySelector(".container");
   const cardGroup = document.querySelector(".card-group");
   const card = document.querySelector(".card");
-  const envelope = document.querySelector(".envelope");
 
   let flipped = false;
   let opened = false;
 
-  // smooth hover/touch animation (card rises gently)
   function animateTop(element, target, duration) {
     let start = null;
     const initial = parseInt(getComputedStyle(element).top) || 0;
@@ -26,7 +24,6 @@ document.addEventListener("DOMContentLoaded", function () {
     requestAnimationFrame(step);
   }
 
-  // Detect if device really supports hover
   const supportsHover = window.matchMedia("(hover: hover)").matches;
 
   if (supportsHover) {
@@ -39,18 +36,18 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!flipped && !opened) animateTop(cardGroup, 0, 600);
     });
   } else {
-    // Touch devices — tap envelope to open
-    envelope.addEventListener("click", () => {
+    // Touch devices — tap container (envelope area) to open
+    container.addEventListener("click", () => {
       if (!opened) {
         cardGroup.style.transition = "top 0.6s ease";
-        cardGroup.style.top = "-200px"; // slide up
+        cardGroup.style.top = "-200px";
         opened = true;
       }
     });
   }
 
-  // Card click always flips (but only after opening on touch)
-  card.addEventListener("click", () => {
+  // Flip card
+  card.addEventListener("click", (event) => {
     if (!supportsHover && !opened) return; // block flip until opened on touch
 
     if (!flipped) {
@@ -60,5 +57,8 @@ document.addEventListener("DOMContentLoaded", function () {
       card.classList.remove("flipped");
       flipped = false;
     }
+
+    // Prevent card click from bubbling up and reopening
+    event.stopPropagation();
   });
 });
