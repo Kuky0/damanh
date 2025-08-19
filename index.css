@@ -97,6 +97,10 @@ body {
   text-align: center;
 }
 
+.back-card .card-border {
+  display: none;
+}
+
 .card.flipped .front-card {
   transform: rotateY(180deg);
 }
