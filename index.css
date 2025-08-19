@@ -14,12 +14,10 @@ body {
   position: fixed !important;
   top: 50% !important;
   left: 50% !important;
-  transform: translate(-50%, -50%) scale(1); /* zoom factor */
+  transform: translate(-50%, -50%); /* base centering only */
   transition: transform 1s ease;
   z-index: 999;
 }
-
-
 .anniversary {
   position: relative;
   top: 50px;

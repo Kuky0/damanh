@@ -54,19 +54,21 @@ document.addEventListener("DOMContentLoaded", function () {
       card.classList.add("flipped");
       flipped = true;
 
-      // After flip finishes (1s transition), zoom the whole group
       setTimeout(() => {
         cardGroup.classList.add("zoomed-group");
+
+        // Apply zoom factor dynamically
+        let zoom = /iPhone|iPad|iPod/i.test(navigator.userAgent) ? 1.8 : 2.5; 
+        cardGroup.style.transform = `translate(-50%, -50%) scale(${zoom})`;
       }, 1000);
     } else {
-      // Flip back
       card.classList.remove("flipped");
-      cardGroup.classList.remove("zoomed-group"); // remove zoom when flipping back
+      cardGroup.classList.remove("zoomed-group");
+      cardGroup.style.transform = ""; // reset inline transform
       flipped = false;
     }
 
     event.stopPropagation();
   });
-
 
 });
